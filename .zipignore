@@ -1,0 +1,10 @@
+*.js.map
+*.ts
+.git*
+.vscode
+sample-config.json
+test
+tsconfig.json
+*.log
+*.zip
+ken.json

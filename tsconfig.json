@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 18",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "target": "ES2020",
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "outDir": "./build/",
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "declaration": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "src/components/Canvas.tsx",
+    "src/components/ViewerScreen.tsx",
+    "src/App.tsx"
+, "src/index.tsx", "src/with-router.tsx"  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
