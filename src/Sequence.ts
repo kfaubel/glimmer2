@@ -26,6 +26,7 @@ export class Sequence {
     nullCount: number;
     profile: string;
     screenListUrlBase: string | undefined;
+    screenListRefreshInterval: NodeJS.Timeout | null;
     
     constructor(profile: string) {
         this.nextIndex = 0;
@@ -33,6 +34,7 @@ export class Sequence {
         this.updatePeriod = 60;
         this.nullCount = 0;
         this.profile = profile;
+        this.screenListRefreshInterval = null;
 
         //dotenv.config();
         this.screenListUrlBase = process.env.REACT_APP_SCREEN_LIST_URL_BASE;
@@ -42,9 +44,11 @@ export class Sequence {
     start = async () => {
         await this.getScreenList();
 
-        // This line will cause the screenlist to be fetched again every 24 hours.
-        // It often fails so lets not do until we understand what is going on.
-        //setInterval(this.getScreenList, 24 * 60 * 60 * 1000);
+        // Fetch the screenlist every 6 hours, purge screens and retrieve new items
+        this.screenListRefreshInterval = setInterval(() => {
+            console.log(`Sequence::start - Refreshing screen list every 6 hours...`);
+            this.refreshScreenList();
+        }, 6 * 60 * 60 * 1000); // 6 hours in milliseconds
 
         await this.update(); // Do it once now.
         setInterval(this.update, 60*1000);
@@ -243,6 +247,38 @@ export class Sequence {
         }
     }
 
+    refreshScreenList = async () => {
+        console.log(`Sequence::refreshScreenList - Starting screen list refresh...`);
+        
+        // Purge current screens by clearing their images and resetting state
+        this.screenList.forEach(screen => {
+            screen.image = null;
+            screen.imageUri = "";
+            screen.nextUpdate = 0;
+            screen.message = "";
+        });
+        
+        // Reset the index to start from the beginning
+        this.nextIndex = 0;
+        
+        // Fetch the new screen list
+        await this.getScreenList();
+        
+        // Update all screens immediately after getting the new list
+        await this.update();
+        
+        console.log(`Sequence::refreshScreenList - Screen list refresh completed. New list has ${this.screenList.length} items.`);
+    }
+
+    // Method to stop the refresh interval (useful for cleanup)
+    stopScreenListRefresh = () => {
+        if (this.screenListRefreshInterval) {
+            clearInterval(this.screenListRefreshInterval);
+            this.screenListRefreshInterval = null;
+            console.log(`Sequence::stopScreenListRefresh - Screen list refresh interval stopped.`);
+        }
+    }
+
     update = async () => {
         console.log(`Sequence::update - **********************  Starting  *********************`);
         const now = new Date().getTime();
@@ -279,9 +315,14 @@ export class Sequence {
                         //console.log(JSON.stringify(err, null, 4));
                         if (axios.isAxiosError(err)) {
                             if (err.response) {
-                                console.warn(`Sequence::update GET result ${err.response.status}`);
+                                console.warn(`Sequence::update GET result ${err.response.status} for ${screen.resource}`);
+                                screen.message = `${screen.friendlyName}: HTTP ${err.response.status}`;
+                            } else if (err.code === 'ERR_NETWORK' || err.message.includes('CORS')) {
+                                console.warn(`Sequence::update CORS/Network error for ${screen.resource}`);
+                                screen.message = `${screen.friendlyName}: CORS/Network error - server may not allow cross-origin requests`;
                             } else {
-                                console.warn(`Sequence::getScreenList GET result NULL`);
+                                console.warn(`Sequence::update GET result NULL for ${screen.resource}`);
+                                screen.message = `${screen.friendlyName}: Network error`;
                             }
 
                             // Failure.  Try again in 10 minutes
@@ -306,6 +347,9 @@ export class Sequence {
                     }
 
                     let image = new Image();
+                    
+                    // Try to set crossorigin attribute to handle CORS-enabled servers
+                    image.crossOrigin = "anonymous";
 
                     image.onload = () => {
                         screen.image = image;
