@@ -9,47 +9,110 @@ body {
 .time-bug {
     position: fixed;
     text-align: center;
-    width: 14%;
-    height: 8%;
+    min-width: 200px;
+    max-width: 280px;
+    width: clamp(200px, 14vw, 280px);
+    min-height: 60px;
+    max-height: 120px;
+    height: clamp(60px, 8vh, 120px);
     z-index: 9999;
     cursor: pointer;
-    border: "8px";
     border-style: solid;
-    border-radius: 20px;
-    border-width: 4px;
+    border-radius: clamp(12px, 1.5vw, 20px);
+    border-width: clamp(2px, 0.3vw, 4px);
     visibility: visible;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 5vh;
+    font-size: clamp(24px, 4.5vh, 48px);
     font-weight: bold;
     background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(8px, 1vh, 16px);
+    box-sizing: border-box;
 }
 
 .time-bug-upper-right-dark {
-    right: 2%;
-    top: 3%;
+    right: clamp(16px, 2vw, 40px);
+    top: clamp(20px, 3vh, 60px);
     color: #006;
     border-color: #006;
 }
 
 .time-bug-lower-right-dark {
-    right: 2%;
-    bottom: 1%;
+    right: clamp(16px, 2vw, 40px);
+    bottom: clamp(12px, 1vh, 30px);
     color: #006;
     border-color: #006;
 }
 
 .time-bug-upper-right-light {
-    right: 2%;
-    top: 3%;
+    right: clamp(16px, 2vw, 40px);
+    top: clamp(20px, 3vh, 60px);
     color: #ccf;
     border-color: #ccf;
 }
 
 .time-bug-lower-right-light {
-    right: 2%;
-    bottom: 1%;
+    right: clamp(16px, 2vw, 40px);
+    bottom: clamp(12px, 1vh, 30px);
     color: #ccf;
     border-color: #ccf;
+}
+
+/* Media queries for specific screen size adjustments */
+@media screen and (max-width: 768px) {
+    .time-bug {
+        font-size: clamp(18px, 5vw, 32px);
+        width: clamp(150px, 20vw, 220px);
+        height: clamp(50px, 10vh, 80px);
+        border-radius: clamp(8px, 2vw, 15px);
+        border-width: clamp(1px, 0.5vw, 3px);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .time-bug {
+        font-size: clamp(16px, 6vw, 28px);
+        width: clamp(120px, 25vw, 180px);
+        height: clamp(40px, 12vh, 70px);
+        border-radius: clamp(6px, 2.5vw, 12px);
+        border-width: clamp(1px, 0.4vw, 2px);
+    }
+    
+    .time-bug-upper-right-dark,
+    .time-bug-upper-right-light {
+        right: clamp(8px, 3vw, 20px);
+        top: clamp(10px, 2vh, 30px);
+    }
+    
+    .time-bug-lower-right-dark,
+    .time-bug-lower-right-light {
+        right: clamp(8px, 3vw, 20px);
+        bottom: clamp(8px, 1vh, 20px);
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    .time-bug {
+        font-size: clamp(40px, 3vh, 60px);
+        width: clamp(250px, 12vw, 350px);
+        height: clamp(80px, 6vh, 140px);
+        border-radius: clamp(18px, 1.2vw, 25px);
+        border-width: clamp(3px, 0.25vw, 6px);
+    }
+    
+    .time-bug-upper-right-dark,
+    .time-bug-upper-right-light {
+        right: clamp(30px, 1.5vw, 60px);
+        top: clamp(40px, 2.5vh, 80px);
+    }
+    
+    .time-bug-lower-right-dark,
+    .time-bug-lower-right-light {
+        right: clamp(30px, 1.5vw, 60px);
+        bottom: clamp(20px, 1vh, 50px);
+    }
 }
 
 .message {
