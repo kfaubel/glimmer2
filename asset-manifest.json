@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/glimmer/static/css/main.de8f393d.css",
+    "main.css": "/glimmer/static/css/main.771c2a82.css",
     "main.js": "/glimmer/static/js/main.a63db298.js",
     "index.html": "/glimmer/index.html",
-    "main.de8f393d.css.map": "/glimmer/static/css/main.de8f393d.css.map",
+    "main.771c2a82.css.map": "/glimmer/static/css/main.771c2a82.css.map",
     "main.a63db298.js.map": "/glimmer/static/js/main.a63db298.js.map"
   },
   "entrypoints": [
-    "static/css/main.de8f393d.css",
+    "static/css/main.771c2a82.css",
     "static/js/main.a63db298.js"
   ]
 }
